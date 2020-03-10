@@ -1,0 +1,11 @@
+-> in the main function we get the name of the txt file
+   we need to read txt into graph vev[vev[]]
+-> have a data container class	
+   -> this will class have the graph.
+   -> it will store the demension of the graph
+   ->as well as the name of the data set
+
+-> we will have a search class that contains the
+   alogorithm for creating the solution path.
+   -> this class will take data* class as parameter.
+   -> we will use this ptr to access the data.  
