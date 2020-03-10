@@ -19,7 +19,9 @@ int main() {
 
    shared_ptr<fileHandler> fileObj = make_shared<fileHandler>();
 
-   shared_ptr<dataHandler> data = fileObj->createData(input);
+   shared_ptr<dataHandler> data = fileObj->createData("input");
+
+   data->printData();
 
 
 

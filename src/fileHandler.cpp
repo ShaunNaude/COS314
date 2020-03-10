@@ -25,6 +25,8 @@ shared_ptr<dataHandler>  fileHandler::createData(string inputfile)
             if(lineNumber == 4)
                 {
                     dimension = findDimension(line);
+                    data->dimension = dimension;
+                    data->graph.resize(dimension);
                 }
 
             if(lineNumber >= 8 && line != "EOF")
@@ -32,9 +34,13 @@ shared_ptr<dataHandler>  fileHandler::createData(string inputfile)
                 addData(line,dimension);
 
             }    
+
+            lineNumber++;
             
         }
     }
+
+    return data;
 
 }
 
@@ -56,14 +62,18 @@ void fileHandler::addData(string line,int dimension)
                 if( !isdigit(line[i+1]) )
                  {
                      //add temp  num to data * must make add edge function in dataHandler.
-                     //count++
-                     //temp=""
+                     int num = stoi(tempNum);
+                     this->data->addEdge(currNode,count,num);
+                     count++;
+                     tempNum="";
 
-                     /*
+                     
                         if(count == dimension)
-                            currnode++
+                        {
+                            currNode++;
                             count=0;
-                     */
+                        }
+                     
                  }
             }
         }

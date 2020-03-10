@@ -9,3 +9,12 @@
    alogorithm for creating the solution path.
    -> this class will take data* class as parameter.
    -> we will use this ptr to access the data.  
+
+
+
+   ////////////////////////////////////////////////////////////////
+
+
+
+
+   ////////////////////////////////////////////////////////////////
