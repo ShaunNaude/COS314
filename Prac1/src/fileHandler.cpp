@@ -85,23 +85,6 @@ void fileHandler::addData(string line,int dimension)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int fileHandler::findDimension(string line)
 {
     string number="";

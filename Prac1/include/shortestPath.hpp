@@ -35,7 +35,7 @@ private:
     struct solution
     {
         int num;
-        list<shared_ptr<Node>> path;
+        vector<shared_ptr<Node>> path;
     };
 //=====================================================================================
 
@@ -44,6 +44,7 @@ private:
 
     shared_ptr<Node> makeNode(int cost , shared_ptr<Node> Parent, int ROW,int COL);
    static bool compare(const shared_ptr<Node>& first, const shared_ptr<Node>& second);
+   void addToSolutions(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node,bool & status);
     
 //=====================================================================================    
     

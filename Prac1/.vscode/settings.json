@@ -6,5 +6,6 @@
         "string": "cpp",
         "vector": "cpp"
     },
-    "terminal.integrated.shell.windows": "cmd.exe"
+    "terminal.integrated.shell.windows": "cmd.exe",
+    "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -12,9 +12,11 @@ void shortestPath::compute()
 {
     vector<shared_ptr<Node>> open;
     bool status = false;
+    vector< shared_ptr<solution> > solutions;
+    
 
     //put start node in open list, will always be 0,0
-    open.push_back( makeNode(0,NULL,0) );
+    open.push_back( makeNode(0,NULL,0,0) );
 
     while(status == false && !(bool)open.empty() )
     {
@@ -24,6 +26,10 @@ void shortestPath::compute()
 
         //=====================
             //here i need to add curr to correct solution tree
+                addToSolutions(solutions,curr,status);
+                if(status==true)
+                    exit;
+                
 
 
         //=====================
@@ -44,6 +50,8 @@ void shortestPath::compute()
 
 
     }
+
+    //if i get here i should have a solution
 
 }
                                                     
@@ -86,4 +94,60 @@ bool shortestPath::compare( const shared_ptr<Node>& first, const shared_ptr<Node
     return true;
   else
     return false;
+}
+
+void shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node,bool & status)
+{
+    if(node->ROW ==0 && node->COL ==0)
+    {
+        shared_ptr<solution> s = make_shared<solution>();
+        s->num = 0;
+        s->path.push_back(node);
+        solutions.push_back(s);
+        node->solutionNum = 0;
+    }
+
+    //find out where the parent is 
+    shared_ptr<Node> parent = node->Parent;
+    //check if the parent already has a better child
+    int amountInPath = solutions[parent->solutionNum]->path.capacity() -1 ;
+    if(amountInPath < node->level)
+    {
+        //we can add it to our solution path
+        //must do final node check
+        solutions[parent->solutionNum]->path.push_back(node);
+        node->solutionNum = parent->solutionNum;
+    }
+    else
+    {
+        //oh fuck we need to create a new solution tree
+        shared_ptr<solution> k = make_shared<solution>();
+        k->num = solutions.capacity();
+        //here we do the copying
+
+        int i = 0;
+        do{
+            k->path.push_back(solutions[parent->solutionNum]->path[i]);
+            i++;
+        }while(solutions[parent->solutionNum]->path[i] != parent);
+
+        //must do final node check
+        k->path.push_back(node);
+        node->solutionNum = k->num;
+        solutions.push_back(k);
+
+    }
+    
+
+
+    //if it does create a new solution , make the solution num solution.length
+        //open everything from original solution upuntil the point of the new node, uptill parent.
+        //add the node
+    //remember we can only the final node ( node that goes back to 0 if the length of solutions[solutionnum] is = dimension-1)
+
+    //remeber where we add our node, now check if the length is == to data.dimension, if yes then we have our solution.
+        //if we have our solution then make status true and save the index of the solution to some global variable
+
+    
+
 }
