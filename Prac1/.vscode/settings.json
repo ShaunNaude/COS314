@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.pdf": "cmake-cache",
+        "*.tpp": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp"
+    },
+    "terminal.integrated.shell.windows": "cmd.exe"
+}
