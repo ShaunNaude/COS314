@@ -62,8 +62,9 @@ void shortestPath::compute()
     }
 
     //if i get here i should have a solution
-    for(int i=0;i<4;i++)
-        cout<<solutions[solutionNUM]->path[i]->totalLength<<endl;
+    
+        int num = solutions[solutionNUM]->path.size();
+        cout<<solutions[solutionNUM]->path[num-1]->totalLength<<endl;
 }
                                                     
 shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node> Parent, int ROW)
