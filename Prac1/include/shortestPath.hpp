@@ -13,6 +13,7 @@ public:
     shared_ptr<dataHandler> data;
     int pathLength;
     string path;
+    
 
     shortestPath();
     void compute();
@@ -29,7 +30,7 @@ private:
         int solutionNum;
         int level;
         int ROW;
-        int COL;
+        
     };
 
     struct solution
@@ -42,9 +43,10 @@ private:
 //=====================================================================================
     //helper functions
 
-    shared_ptr<Node> makeNode(int cost , shared_ptr<Node> Parent, int ROW,int COL);
+    shared_ptr<Node> makeNode(int cost , shared_ptr<Node> Parent, int ROW);
    static bool compare(const shared_ptr<Node>& first, const shared_ptr<Node>& second);
-   void addToSolutions(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node,bool & status);
+   bool addToSolutions(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node,bool & status);
+   int solutionNUM;
     
 //=====================================================================================    
     
