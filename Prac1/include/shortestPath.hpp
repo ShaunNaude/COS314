@@ -53,7 +53,7 @@ private:
    int solutionNUM;
 
    void insert(vector<shared_ptr<Node>> & open , shared_ptr<shortestPath::Node>  node);
-   int currentlength;
+   int currentlength = 0;
 
    bool contains(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node);
 

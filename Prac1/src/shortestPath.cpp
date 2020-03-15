@@ -22,6 +22,7 @@ void shortestPath::compute()
 
     while(status == false && !(bool)open.empty() )
     {
+        printf(" =  %d\n",currentlength);
         //gets element 1 from open vector, and removes it
         shared_ptr<Node> curr = open.front();
         open.erase(open.begin());
@@ -38,31 +39,43 @@ void shortestPath::compute()
         //=====================
 
         //generate children
-
+        vector<shared_ptr<Node>> tempOpen;
         for(int i = 0 ; i<data->dimension;i++)
         {
             if(curr->ROW != i)         
-            /*
-            okay the way im making my nodes is fucked
-            when im generating children i think im setting the row/column incorrectly
-            fuck
-            */                                                       
-               // open.push_back(
-               //     makeNode(data->graph[curr->ROW][i].second,//cost
-               //     curr,//parent
-                //    i));//ROW of resulting node
-                insert( open, makeNode(data->graph[curr->ROW][i].second,curr,i)  );//ROW of resulting node
+            {
+                shared_ptr<Node> temp = makeNode(data->graph[curr->ROW][i].second,curr,i);
+                
+               // insert(tempOpen,temp);
+
+
+
+                    if(contains(solutions,temp)==false)
+                        insert( open, temp  );//ROW of resulting node
+                
+            }
         
 
 
                 
             
         }
+       // int k=0;
+       // while(k<tempOpen.size())
+      //  {
+        //    shared_ptr<Node> temp = tempOpen.front();
+         //   tempOpen.erase(tempOpen.begin());
+        //    if(contains(solutions,temp)==false)
+        //    {
+        //        open.push_back(temp);
+         //       k++;
+          //  }
+        
 
         //sort open nodes by f(n)
         //sort(open.begin(),open.end(),compare);
         
-
+        
 
 
     }
@@ -96,17 +109,19 @@ shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node
         return X;
     }
 
-    srand (time(NULL));
-    if(cost==0)
+    
+    srand(time(NULL));
+     if(cost==0)
     X->heuristic = rand() % 10; 
-    else X->heuristic = rand() % cost;
+   else X->heuristic = rand() % cost;
+
     X->cost = cost;
     X->level = Parent->level + 1;
     X-> solutionNum = Parent->solutionNum;
     X->totalLength = cost + Parent->totalLength;
     X->Parent = Parent;
     X->ROW = ROW;
-    X->f = X->totalLength + X->heuristic;    
+    X->f = X->totalLength+ X->heuristic ;    
 
 
 
@@ -138,6 +153,7 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
     shared_ptr<Node> parent = node->Parent;
     //check if the parent already has a better child
     int amountInPath = solutions[parent->solutionNum]->path.size() -1 ;
+    int j =solutions[parent->solutionNum]->path.size();
 
     
     bool check = contains(solutions,node);
@@ -145,7 +161,10 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
     if(check == true)
         return false;
 
+        
 
+    if( ( j == data->dimension) && (node->ROW != 0) )
+        return false;
 
 
 
@@ -179,7 +198,8 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
           {
               solutions[parent->solutionNum]->path.push_back(node);
               node->solutionNum = parent->solutionNum;
-              currentlength = node->totalLength;
+              currentlength = solutions[node->solutionNum]->path.size();
+              
               return true;
 
           }
@@ -187,6 +207,10 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
     }
     else
     {
+        static int count=0;
+        count++;
+        if(count > 20)
+        return false;
         //oh fuck we need to create a new solution tree
         shared_ptr<solution> k = make_shared<solution>();
         k->num = solutions.size();
@@ -244,7 +268,8 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
         {
             k->path.push_back(node);
            node->solutionNum = k->num;
-           currentlength = node->totalLength;
+          currentlength = solutions[node->solutionNum]->path.size();
+         
            return true;
         }
 
@@ -280,11 +305,17 @@ void shortestPath::insert(vector<shared_ptr<Node>> & open , shared_ptr<shortestP
 
 bool shortestPath::contains(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node)
 {
+    int num;
+
+    if(node->Parent == NULL)
+        num = 0;
+
+  else   num = node->Parent->solutionNum;
 
     if(node->ROW==0)
         return false;
 
-    for(auto iter = solutions[node->Parent->solutionNum]->path.begin();iter!=solutions[node->Parent->solutionNum]->path.end();iter++)
+    for(auto iter = solutions[num]->path.begin();iter!=solutions[num]->path.end();iter++)
     {
         if(iter->get()->ROW == node->ROW)
             return true;
