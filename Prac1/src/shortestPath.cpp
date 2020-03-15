@@ -1,3 +1,5 @@
+//the problem with this code is we visting the same city  twice.. check when adding solutions
+
 #include "shortestPath.hpp"
 
 shortestPath::shortestPath() {
@@ -23,7 +25,6 @@ void shortestPath::compute()
         //gets element 1 from open vector, and removes it
         shared_ptr<Node> curr = open.front();
         open.erase(open.begin());
-
         //=====================
             //here i need to add curr to correct solution tree
             bool added = addToSolutions(solutions,curr,status);
@@ -46,15 +47,20 @@ void shortestPath::compute()
             when im generating children i think im setting the row/column incorrectly
             fuck
             */                                                       
-                open.push_back(
-                    makeNode(data->graph[curr->ROW][i].second,//cost
-                    curr,//parent
-                    i));//ROW of resulting node
+               // open.push_back(
+               //     makeNode(data->graph[curr->ROW][i].second,//cost
+               //     curr,//parent
+                //    i));//ROW of resulting node
+                insert( open, makeNode(data->graph[curr->ROW][i].second,curr,i)  );//ROW of resulting node
+        
+
+
+                
             
         }
 
         //sort open nodes by f(n)
-        sort(open.begin(),open.end(),compare);
+        //sort(open.begin(),open.end(),compare);
         
 
 
@@ -63,8 +69,15 @@ void shortestPath::compute()
 
     //if i get here i should have a solution
     
+        for(int i = 0; i< solutions[solutionNUM]->path.size();i++)
+        {
+            
+              cout<<solutions[solutionNUM]->path[i]->ROW << " | ";
+              
+        }
+        cout<<endl;
         int num = solutions[solutionNUM]->path.size();
-        cout<<solutions[solutionNUM]->path[num-1]->totalLength<<endl;
+        cout<<solutions[solutionNUM]->path[num-1]->totalLength;
 }
                                                     
 shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node> Parent, int ROW)
@@ -73,25 +86,27 @@ shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node
     if(Parent == NULL )
     {
         
-        X->choice = -1;
         X->cost = 0;
         X->level = 0;
         X->solutionNum = 0;
         X->totalLength = 0;
         X->Parent = NULL;
         X->ROW = 0;
+        X->heuristic = 0;
         return X;
     }
 
-        
-    X->choice=-1;
+    srand (time(NULL));
+    if(cost==0)
+    X->heuristic = rand() % 10; 
+    else X->heuristic = rand() % cost;
     X->cost = cost;
     X->level = Parent->level + 1;
     X-> solutionNum = Parent->solutionNum;
     X->totalLength = cost + Parent->totalLength;
     X->Parent = Parent;
     X->ROW = ROW;
-    
+    X->f = X->totalLength + X->heuristic;    
 
 
 
@@ -124,8 +139,11 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
     //check if the parent already has a better child
     int amountInPath = solutions[parent->solutionNum]->path.size() -1 ;
 
-  
     
+    bool check = contains(solutions,node);
+
+    if(check == true)
+        return false;
 
 
 
@@ -161,6 +179,7 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
           {
               solutions[parent->solutionNum]->path.push_back(node);
               node->solutionNum = parent->solutionNum;
+              currentlength = node->totalLength;
               return true;
 
           }
@@ -174,11 +193,25 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
         //here we do the copying
 
         int i = 0;
-        do{
+
+        if(parent->level == 0)
+        {
+             k->path.push_back(solutions[parent->solutionNum]->path[i]);
+            k->path[i]->solutionNum = k->num;
+        }
+        else
+        {
+             do{
             k->path.push_back(solutions[parent->solutionNum]->path[i]);
             k->path[i]->solutionNum = k->num;
             i++;
+            
         }while(i <= parent->level);
+
+        }
+
+
+       
 
         //must do final node check
         solutions.push_back(k);
@@ -211,6 +244,7 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
         {
             k->path.push_back(node);
            node->solutionNum = k->num;
+           currentlength = node->totalLength;
            return true;
         }
 
@@ -228,4 +262,33 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
 
     
 
+}
+
+void shortestPath::insert(vector<shared_ptr<Node>> & open , shared_ptr<shortestPath::Node>  node)
+{
+   for (auto iter = open.begin(); iter != open.end(); iter++)
+   {
+       if(node->f < iter->get()->f)
+       {
+            open.insert(iter,node);
+            return;
+       }
+   }
+
+   open.push_back(node);
+}
+
+bool shortestPath::contains(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node)
+{
+
+    if(node->ROW==0)
+        return false;
+
+    for(auto iter = solutions[node->Parent->solutionNum]->path.begin();iter!=solutions[node->Parent->solutionNum]->path.end();iter++)
+    {
+        if(iter->get()->ROW == node->ROW)
+            return true;
+    }
+
+    return false;
 }
