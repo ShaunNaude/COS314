@@ -106,6 +106,7 @@ inline shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_p
     X->Parent = Parent;
     X->ROW = ROW;
     X->f = X->totalLength + X->heuristic ;    
+    return X;
 
 
 
