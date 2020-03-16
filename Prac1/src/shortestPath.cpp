@@ -11,19 +11,21 @@ shortestPath::~shortestPath() {
 void shortestPath::compute()
 {
     
-    bool status = false;
+    
     //put start node in open list, will always be 0,0
-    open.push_back( makeNode(0,NULL,0) );
+    //open.push_back( makeNode(0,NULL,0) );
+    open.push(makeNode(0,NULL,0));
 
     while(status == false && !(bool)open.empty() )
     {
         printf(" =  %d\n",currentlength);
         //gets element 1 from open vector, and removes it
-        shared_ptr<Node> curr = open.front();
-        open.erase(open.begin());
+        shared_ptr<Node> curr = open.top();
+        open.pop();
+        //open.erase(open.begin());
         //=====================
             //here i need to add curr to correct solution tree
-            bool added = addToSolutions(curr,status);
+            bool added = addToSolutions(curr);
                 if(status==true)
                     exit;
                 if(added==false)
@@ -46,7 +48,9 @@ void shortestPath::compute()
 
 
                     if(contains(temp)==false)
-                        insert( temp  );//ROW of resulting node
+                        //insert( temp  );//ROW of resulting node
+                       //open.push_back(temp);
+                       open.push(temp);
                 
             }
         
@@ -56,7 +60,7 @@ void shortestPath::compute()
             
         }
     
-        
+       // sort(open.begin(),open.end(),compare);
         
 
 
@@ -75,7 +79,7 @@ void shortestPath::compute()
         cout<<solutions[solutionNUM]->path[num-1]->totalLength;
 }
                                                     
-shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node> Parent, int ROW)
+inline shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node> Parent, int ROW)
 {
     shared_ptr<Node> X = make_shared<Node>();
     if(Parent == NULL )
@@ -92,10 +96,10 @@ shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node
     }
 
     
-    //srand(time(NULL));
-     //if(cost==0)
-    //X->heuristic = rand() % 10; 
-   //else X->heuristic = rand() % cost;
+    srand(time(NULL));
+     if(cost==0)
+    X->heuristic = rand() % 10; 
+   else X->heuristic = rand() % cost;
 
     X->cost = cost;
     X->level = Parent->level + 1;
@@ -103,7 +107,7 @@ shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node
     X->totalLength = cost + Parent->totalLength;
     X->Parent = Parent;
     X->ROW = ROW;
-    X->f = X->totalLength;//+ X->heuristic ;    
+    X->f = X->totalLength + X->heuristic ;    
 
 
 
@@ -111,7 +115,7 @@ shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node
 
 }
 
-bool shortestPath::compare( const shared_ptr<Node>& first, const shared_ptr<Node>& second)
+inline bool shortestPath::compare( const shared_ptr<Node>& first, const shared_ptr<Node>& second)
 {
   if (first->totalLength < second->totalLength)
     return true;
@@ -119,7 +123,7 @@ bool shortestPath::compare( const shared_ptr<Node>& first, const shared_ptr<Node
     return false;
 }
 
-bool shortestPath::addToSolutions(shared_ptr<Node> node,bool & status)
+inline bool shortestPath::addToSolutions(shared_ptr<Node> node)
 {
     if(node->ROW ==0 && solutions.empty())
     {
@@ -135,21 +139,13 @@ bool shortestPath::addToSolutions(shared_ptr<Node> node,bool & status)
     shared_ptr<Node> parent = node->Parent;
     //check if the parent already has a better child
     int amountInPath = solutions[parent->solutionNum]->path.size() -1 ;
-    int j =solutions[parent->solutionNum]->path.size();
-
-    
+  
     bool check = contains(node);
 
     if(check == true)
         return false;
 
         
-
-    if( ( j == data->dimension) && (node->ROW != 0) )
-        return false;
-
-
-
     if(amountInPath < node->level)
     {
         //we can add it to our solution path
@@ -176,8 +172,8 @@ bool shortestPath::addToSolutions(shared_ptr<Node> node,bool & status)
             status = true;
             return true;
           }
-          if(amountInPath+1 < data->dimension)
-          {
+          
+        else  {
               solutions[parent->solutionNum]->path.push_back(node);
               node->solutionNum = parent->solutionNum;
               currentlength = solutions[node->solutionNum]->path.size();
@@ -189,9 +185,9 @@ bool shortestPath::addToSolutions(shared_ptr<Node> node,bool & status)
     }
     else
     {
-        static int count=0;
+        
         count++;
-        if(count > 21)
+        if(count > 1000)
         return false;
         //oh fuck we need to create a new solution tree
         shared_ptr<solution> k = make_shared<solution>();
@@ -246,7 +242,7 @@ bool shortestPath::addToSolutions(shared_ptr<Node> node,bool & status)
         status = true;
         return true;
          }
-        if(amountInPath+1 < data->dimension)
+        else
         {
             k->path.push_back(node);
            node->solutionNum = k->num;
@@ -260,9 +256,9 @@ bool shortestPath::addToSolutions(shared_ptr<Node> node,bool & status)
 
 }
 
-void shortestPath::insert(shared_ptr<shortestPath::Node>  node)
+inline void shortestPath::insert(shared_ptr<shortestPath::Node>  node)
 {
-   for (auto iter = open.begin(); iter != open.end(); iter++)
+   /*for (auto iter = open.begin(); iter != open.end(); iter++)
    {
        if(node->f < iter->get()->f)
        {
@@ -270,11 +266,21 @@ void shortestPath::insert(shared_ptr<shortestPath::Node>  node)
             return;
        }
    }
+    
 
-   open.push_back(node);
+   open.push_back(node);*/
+    
+        
+    /*open.push_back(node);
+     auto pos = std::upper_bound(open.begin(), open.end()-1,node,Node::less_than());
+  // and move the array around it:
+  std::move_backward(pos, open.end()-1, pos+1);
+  // and set the new element:
+  *pos = node;*/
+
 }
 
-bool shortestPath::contains(shared_ptr<Node> node)
+inline bool shortestPath::contains(shared_ptr<Node> node)
 {
     int num;
 
@@ -294,3 +300,8 @@ bool shortestPath::contains(shared_ptr<Node> node)
 
     return false;
 }
+
+//bool shortestPath::compareF(const shared_ptr<Node> &a, const shared_ptr<Node> &b)
+//{
+    //return a->f > b->f;
+//}
