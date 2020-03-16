@@ -1,5 +1,3 @@
-//the problem with this code is we visting the same city  twice.. check when adding solutions
-
 #include "shortestPath.hpp"
 
 shortestPath::shortestPath() {
@@ -12,11 +10,8 @@ shortestPath::~shortestPath() {
 
 void shortestPath::compute()
 {
-    vector<shared_ptr<Node>> open;
-    bool status = false;
-    vector< shared_ptr<solution> > solutions;
     
-
+    bool status = false;
     //put start node in open list, will always be 0,0
     open.push_back( makeNode(0,NULL,0) );
 
@@ -28,7 +23,7 @@ void shortestPath::compute()
         open.erase(open.begin());
         //=====================
             //here i need to add curr to correct solution tree
-            bool added = addToSolutions(solutions,curr,status);
+            bool added = addToSolutions(curr,status);
                 if(status==true)
                     exit;
                 if(added==false)
@@ -50,8 +45,8 @@ void shortestPath::compute()
 
 
 
-                    if(contains(solutions,temp)==false)
-                        insert( open, temp  );//ROW of resulting node
+                    if(contains(temp)==false)
+                        insert( temp  );//ROW of resulting node
                 
             }
         
@@ -60,20 +55,7 @@ void shortestPath::compute()
                 
             
         }
-       // int k=0;
-       // while(k<tempOpen.size())
-      //  {
-        //    shared_ptr<Node> temp = tempOpen.front();
-         //   tempOpen.erase(tempOpen.begin());
-        //    if(contains(solutions,temp)==false)
-        //    {
-        //        open.push_back(temp);
-         //       k++;
-          //  }
-        
-
-        //sort open nodes by f(n)
-        //sort(open.begin(),open.end(),compare);
+    
         
         
 
@@ -110,10 +92,10 @@ shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node
     }
 
     
-    srand(time(NULL));
-     if(cost==0)
-    X->heuristic = rand() % 10; 
-   else X->heuristic = rand() % cost;
+    //srand(time(NULL));
+     //if(cost==0)
+    //X->heuristic = rand() % 10; 
+   //else X->heuristic = rand() % cost;
 
     X->cost = cost;
     X->level = Parent->level + 1;
@@ -121,7 +103,7 @@ shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node
     X->totalLength = cost + Parent->totalLength;
     X->Parent = Parent;
     X->ROW = ROW;
-    X->f = X->totalLength+ X->heuristic ;    
+    X->f = X->totalLength;//+ X->heuristic ;    
 
 
 
@@ -137,7 +119,7 @@ bool shortestPath::compare( const shared_ptr<Node>& first, const shared_ptr<Node
     return false;
 }
 
-bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node,bool & status)
+bool shortestPath::addToSolutions(shared_ptr<Node> node,bool & status)
 {
     if(node->ROW ==0 && solutions.empty())
     {
@@ -156,7 +138,7 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
     int j =solutions[parent->solutionNum]->path.size();
 
     
-    bool check = contains(solutions,node);
+    bool check = contains(node);
 
     if(check == true)
         return false;
@@ -209,7 +191,7 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
     {
         static int count=0;
         count++;
-        if(count > 20)
+        if(count > 21)
         return false;
         //oh fuck we need to create a new solution tree
         shared_ptr<solution> k = make_shared<solution>();
@@ -276,20 +258,9 @@ bool shortestPath::addToSolutions(vector< shared_ptr<solution> >  &solutions,sha
     }
     
 
-
-    //if it does create a new solution , make the solution num solution.length
-        //open everything from original solution upuntil the point of the new node, uptill parent.
-        //add the node
-    //remember we can only the final node ( node that goes back to 0 if the length of solutions[solutionnum] is = dimension-1)
-
-    //remeber where we add our node, now check if the length is == to data.dimension, if yes then we have our solution.
-        //if we have our solution then make status true and save the index of the solution to some global variable
-
-    
-
 }
 
-void shortestPath::insert(vector<shared_ptr<Node>> & open , shared_ptr<shortestPath::Node>  node)
+void shortestPath::insert(shared_ptr<shortestPath::Node>  node)
 {
    for (auto iter = open.begin(); iter != open.end(); iter++)
    {
@@ -303,7 +274,7 @@ void shortestPath::insert(vector<shared_ptr<Node>> & open , shared_ptr<shortestP
    open.push_back(node);
 }
 
-bool shortestPath::contains(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node)
+bool shortestPath::contains(shared_ptr<Node> node)
 {
     int num;
 

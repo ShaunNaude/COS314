@@ -13,9 +13,13 @@ using namespace std;
 class shortestPath {
     
 public:
+
+//====================GLOBAL varibales===================================
     shared_ptr<dataHandler> data;
     int pathLength;
     string path;
+    
+//=======================================================================
     
 
     shortestPath();
@@ -49,15 +53,19 @@ private:
 
     shared_ptr<Node> makeNode(int cost , shared_ptr<Node> Parent, int ROW);
    static bool compare(const shared_ptr<Node>& first, const shared_ptr<Node>& second);
-   bool addToSolutions(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node,bool & status);
+   bool addToSolutions(shared_ptr<Node> node,bool & status);
    int solutionNUM;
 
-   void insert(vector<shared_ptr<Node>> & open , shared_ptr<shortestPath::Node>  node);
+   void insert(shared_ptr<shortestPath::Node>  node);
    int currentlength = 0;
 
-   bool contains(vector< shared_ptr<solution> >  &solutions,shared_ptr<Node> node);
+   bool contains(shared_ptr<Node> node);
 
 //=====================================================================================    
+
+
+    vector<shared_ptr<shortestPath::Node>> open;
+    vector< shared_ptr<shortestPath::solution> > solutions;
     
 
 };
