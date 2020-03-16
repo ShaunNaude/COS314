@@ -96,13 +96,11 @@ inline shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_p
     }
 
     
-    srand(time(NULL));
-     if(cost==0)
-    X->heuristic = rand() % 10; 
-   else X->heuristic = rand() % cost;
+   
+   X->level = Parent->level + 1;
+   X->heuristic = cost/X->level;
 
     X->cost = cost;
-    X->level = Parent->level + 1;
     X-> solutionNum = Parent->solutionNum;
     X->totalLength = cost + Parent->totalLength;
     X->Parent = Parent;
