@@ -153,6 +153,7 @@ inline bool shortestPath::addToSolutions(shared_ptr<Node> node)
             if(solutions[parent->solutionNum]->path.size() == data->dimension)
             {
                 solutions[parent->solutionNum]->path.push_back(node);
+                solutions[parent->solutionNum]->rowNums.insert(node->ROW);
                 node->solutionNum = parent->solutionNum;
                 status = true;
                 solutionNUM = node->solutionNum;
@@ -166,6 +167,7 @@ inline bool shortestPath::addToSolutions(shared_ptr<Node> node)
           if(amountInPath+1 == data->dimension && node->ROW==0)
           {
             solutions[parent->solutionNum]->path.push_back(node);
+            solutions[parent->solutionNum]->rowNums.insert(node->ROW);
             node->solutionNum = parent->solutionNum;
             status = true;
             return true;
@@ -173,6 +175,7 @@ inline bool shortestPath::addToSolutions(shared_ptr<Node> node)
           
         else  {
               solutions[parent->solutionNum]->path.push_back(node);
+              solutions[parent->solutionNum]->rowNums.insert(node->ROW);
               node->solutionNum = parent->solutionNum;
               currentlength = solutions[node->solutionNum]->path.size();
               
@@ -197,12 +200,14 @@ inline bool shortestPath::addToSolutions(shared_ptr<Node> node)
         if(parent->level == 0)
         {
              k->path.push_back(solutions[parent->solutionNum]->path[i]);
+             k->rowNums.insert(solutions[parent->solutionNum]->path[i]->ROW);
             k->path[i]->solutionNum = k->num;
         }
         else
         {
              do{
             k->path.push_back(solutions[parent->solutionNum]->path[i]);
+            k->rowNums.insert(solutions[parent->solutionNum]->path[i]->ROW);
             k->path[i]->solutionNum = k->num;
             i++;
             
@@ -289,15 +294,18 @@ inline bool shortestPath::contains(shared_ptr<Node> node)
         return false;
 
     
+     if (solutions[num]->rowNums.find(node->ROW) == solutions[num]->rowNums.end())
+        return false;
+
+        return true;
     
-    
-    for(auto iter = solutions[num]->path.begin();iter!=solutions[num]->path.end();iter++)
+    /*for(auto iter = solutions[num]->path.begin();iter!=solutions[num]->path.end();iter++)
     {
         if(iter->get()->ROW == node->ROW)
            return true;
     }
 
-    return false;
+    return false;*/
 }
 
 //bool shortestPath::compareF(const shared_ptr<Node> &a, const shared_ptr<Node> &b)

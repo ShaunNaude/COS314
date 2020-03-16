@@ -8,6 +8,7 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <queue>
+#include <bits/stdc++.h> 
 
 using namespace std;
 
@@ -59,6 +60,7 @@ private:
     {
         int num;
         vector<shared_ptr<shortestPath::Node>> path;
+        unordered_set<int> rowNums;
     };
 //=====================================================================================
 
