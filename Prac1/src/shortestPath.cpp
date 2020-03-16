@@ -282,20 +282,21 @@ inline void shortestPath::insert(shared_ptr<shortestPath::Node>  node)
 
 inline bool shortestPath::contains(shared_ptr<Node> node)
 {
-    int num;
+    int num=0;
 
-    if(node->Parent == NULL)
-        num = 0;
-
-  else   num = node->Parent->solutionNum;
+    if(node->Parent != NULL)
+        num = node->Parent->solutionNum;  
 
     if(node->ROW==0)
         return false;
 
+    
+    
+    
     for(auto iter = solutions[num]->path.begin();iter!=solutions[num]->path.end();iter++)
     {
         if(iter->get()->ROW == node->ROW)
-            return true;
+           return true;
     }
 
     return false;
