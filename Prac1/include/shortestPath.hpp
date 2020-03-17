@@ -71,17 +71,13 @@ private:
    static bool compare(const shared_ptr<Node>& first, const shared_ptr<Node>& second);
    bool addToSolutions(shared_ptr<Node> node);
    int solutionNUM;
-
-   void insert(shared_ptr<shortestPath::Node>  node);
    int currentlength = 0;
-
    bool contains(shared_ptr<Node> node);
    static bool compareF(const shared_ptr<shortestPath::Node> &a, const shared_ptr<shortestPath::Node> &b);
 
 //=====================================================================================    
 
-
-   // vector<shared_ptr<shortestPath::Node>> open;
+    //some global variables
     priority_queue<shared_ptr<shortestPath::Node>,vector<shared_ptr<shortestPath::Node> >, CompareHeight > open ;
     vector< shared_ptr<shortestPath::solution> > solutions;
     int count=0;

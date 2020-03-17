@@ -17,7 +17,7 @@ int main() {
 
    cout<<"please enter the name of the file: ";
    getline(cin,input);
-
+   cout<<endl;
    shared_ptr<fileHandler> fileObj = make_shared<fileHandler>();
 
    shared_ptr<dataHandler> data = fileObj->createData(input);

@@ -18,7 +18,7 @@ void shortestPath::compute()
 
     while(status == false && !(bool)open.empty() )
     {
-        printf(" =  %d\n",currentlength);
+        //printf(" =  %d\n",currentlength);
         //gets element 1 from open vector, and removes it
         shared_ptr<Node> curr = open.top();
         open.pop();
@@ -30,9 +30,7 @@ void shortestPath::compute()
                     exit;
                 if(added==false)
                     continue;
-                
-
-
+            
         //=====================
 
         //generate children
@@ -43,41 +41,35 @@ void shortestPath::compute()
             {
                 shared_ptr<Node> temp = makeNode(data->graph[curr->ROW][i].second,curr,i);
                 
-               // insert(tempOpen,temp);
-
-
-
                     if(contains(temp)==false)
-                        //insert( temp  );//ROW of resulting node
-                       //open.push_back(temp);
                        open.push(temp);
                 
             }
         
-
-
-                
             
         }
-    
-       // sort(open.begin(),open.end(),compare);
-        
 
 
     }
 
     //if i get here i should have a solution
-    
+
+        string out = "";
         for(int i = 0; i< solutions[solutionNUM]->path.size();i++)
         {
-            
-              cout<<solutions[solutionNUM]->path[i]->ROW << " | ";
+            if(i == solutions[solutionNUM]->path.size()-1)
+                out = out + to_string(solutions[solutionNUM]->path[i]->ROW);
+            else    out = out + to_string(solutions[solutionNUM]->path[i]->ROW) + ","; 
               
         }
-        cout<<endl;
-        int num = solutions[solutionNUM]->path.size();
-        cout<<solutions[solutionNUM]->path[num-1]->totalLength;
-}
+
+         
+
+            int num = solutions[solutionNUM]->path.size();
+            cout<<out<<" - "<<solutions[solutionNUM]->path[num-1]->totalLength<<endl;
+       
+}   
+        
                                                     
 inline shared_ptr<shortestPath::Node> shortestPath::makeNode(int cost , shared_ptr<Node> Parent, int ROW)
 {
@@ -260,30 +252,6 @@ inline bool shortestPath::addToSolutions(shared_ptr<Node> node)
 
 }
 
-inline void shortestPath::insert(shared_ptr<shortestPath::Node>  node)
-{
-   /*for (auto iter = open.begin(); iter != open.end(); iter++)
-   {
-       if(node->f < iter->get()->f)
-       {
-            open.insert(iter,node);
-            return;
-       }
-   }
-    
-
-   open.push_back(node);*/
-    
-        
-    /*open.push_back(node);
-     auto pos = std::upper_bound(open.begin(), open.end()-1,node,Node::less_than());
-  // and move the array around it:
-  std::move_backward(pos, open.end()-1, pos+1);
-  // and set the new element:
-  *pos = node;*/
-
-}
-
 inline bool shortestPath::contains(shared_ptr<Node> node)
 {
     int num=0;
@@ -300,16 +268,6 @@ inline bool shortestPath::contains(shared_ptr<Node> node)
 
         return true;
     
-    /*for(auto iter = solutions[num]->path.begin();iter!=solutions[num]->path.end();iter++)
-    {
-        if(iter->get()->ROW == node->ROW)
-           return true;
-    }
-
-    return false;*/
+   
 }
 
-//bool shortestPath::compareF(const shared_ptr<Node> &a, const shared_ptr<Node> &b)
-//{
-    //return a->f > b->f;
-//}
