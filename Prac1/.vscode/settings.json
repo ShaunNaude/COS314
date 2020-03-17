@@ -10,5 +10,5 @@
         "hash_map": "cpp"
     },
     "terminal.integrated.shell.windows": "cmd.exe",
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Enabled"
 }
