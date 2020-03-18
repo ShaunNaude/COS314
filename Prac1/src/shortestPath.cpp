@@ -13,16 +13,15 @@ void shortestPath::compute()
     
     
     //put start node in open list, will always be 0,0
-    //open.push_back( makeNode(0,NULL,0) );
     open.push(makeNode(0,NULL,0));
 
     while(status == false && !(bool)open.empty() )
     {
-        //printf(" =  %d\n",currentlength);
+       
         //gets element 1 from open vector, and removes it
         shared_ptr<Node> curr = open.top();
         open.pop();
-        //open.erase(open.begin());
+        
         //=====================
             //here i need to add curr to correct solution tree
             bool added = addToSolutions(curr);
