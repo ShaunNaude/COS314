@@ -1,6 +1,8 @@
 {
     "files.associations": {
-        "*.tpp": "cpp"
+        "*.pdf": "cmake-cache",
+        "*.tpp": "cpp",
+        "iostream": "cpp"
     },
     "terminal.integrated.shell.windows": "cmd.exe"
 }

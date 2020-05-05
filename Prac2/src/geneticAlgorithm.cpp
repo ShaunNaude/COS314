@@ -163,6 +163,7 @@ void geneticAlgorithm::createPopulation(){
 
         temp->fitness=calcFitness(temp);
         Population.push(temp);
+        holder.push_back(temp);
        
    }
    
@@ -230,7 +231,7 @@ void geneticAlgorithm::createPopulation(){
 
     //squares
 
-    int start;
+    /*int start;
     int end;
     int startC;
     int endC;
@@ -279,7 +280,7 @@ void geneticAlgorithm::createPopulation(){
             if(count>6)
             count=0;
 
-        }
+        }*/
 
         return fitness;
 
@@ -321,15 +322,17 @@ void geneticAlgorithm::start(){
             cout<<endl;
         }*/
 
-        while(Population.top()->fitness != 243)
+        while(stop == false)
         {
             //breed pop /mutate / evaluate
             
-                printf("Integer value is %d\n" , Population.top()->fitness);
+                // printf("Integer value is %d\n" , Population.top()->fitness);
+                 gens++;
                  breed();
+
             
-            if(Population.top()->fitness >= 235)
-                brute(Population.top());
+            //if(Population.top()->fitness >= 235)
+                //brute(Population.top());
            
             
 
@@ -350,8 +353,10 @@ void geneticAlgorithm::start(){
     }
 
     
-    for(int i = 0 ; i<parents.size();i++)
+
+    for(int i = 0 ; i<parents.size();i++){
         PopulationNew.push(parents[i]);
+    }
     
     parents.clear();
     
@@ -578,6 +583,9 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
      p1 = Population.top();
         parents.push_back(p1);
         Population.pop();
+
+
+        
         p2 = Population.top();
         parents.push_back(p2);
         Population.pop();
@@ -747,10 +755,37 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
 
 
     //TODO: MUST do mutation on k1 here 
+     k1->fitness = calcFitness(k1);
+     if(k1->fitness == 162)
+     {
+         cout<<"Number of trials: "<<gens<<endl;
+         stop = true;
+         for(int k = 0 ; k<9 ; k++)
+        {
+            for(int j = 0 ; j<9 ; j++)
+            {
+                cout<<k1->numbers[k][j]<<" ";
+            }
+            cout<<endl;
+        }
+     }
 
     mutate(k1);
     
     k1->fitness = calcFitness(k1);
+    if(k1->fitness == 162)
+     {
+         cout<<"Number of trials: "<<gens<<endl;
+         stop = true;
+         for(int k = 0 ; k<9 ; k++)
+        {
+            for(int j = 0 ; j<9 ; j++)
+            {
+                cout<<k1->numbers[k][j]<<" ";
+            }
+            cout<<endl;
+        }
+     }
     PopulationNew.push(k1);
 
 
@@ -935,9 +970,38 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
 
 
     //TODO: MUST do mutation on k2 here 
+     k1->fitness = calcFitness(k1);
+     if(k1->fitness == 162)
+     {
+         cout<<"Number of trials: "<<gens<<endl;
+         stop = true;
+         for(int k = 0 ; k<9 ; k++)
+        {
+            for(int j = 0 ; j<9 ; j++)
+            {
+                cout<<k1->numbers[k][j]<<" ";
+            }
+            cout<<endl;
+        }
+
+     }
+
     mutate(k1);
     
     k1->fitness = calcFitness(k1);
+    if(k1->fitness == 162)
+     {
+         cout<<"Number of trials: "<<gens<<endl;
+         stop = true;
+         for(int k = 0 ; k<9 ; k++)
+        {
+            for(int j = 0 ; j<9 ; j++)
+            {
+                cout<<k1->numbers[k][j]<<" ";
+            }
+            cout<<endl;
+        }
+     }
     PopulationNew.push(k1);
 
 }
@@ -973,6 +1037,15 @@ int geneticAlgorithm::random4()
     static std::uniform_int_distribution<int> uid(6,8); // random dice
     return uid(rng); // use rng as a generator
 
+}
+int geneticAlgorithm::random150()
+{
+     static std::random_device rd; // random device engine, usually based on /dev/random on UNIX-like systems
+    // initialize Mersennes' twister using rd to generate the seed
+    static std::mt19937 rng(rd()); 
+
+    static std::uniform_int_distribution<int> uid(0,149); // random dice
+    return uid(rng); // use rng as a generator
 }
 
 void geneticAlgorithm::brute(shared_ptr<puzzle> Curr)

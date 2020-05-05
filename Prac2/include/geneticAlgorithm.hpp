@@ -37,9 +37,12 @@ private:
 
     //input puzzle
     shared_ptr<puzzle> Input ;
+    bool stop = false;
+    int gens = 0;
     //popualtion
     priority_queue<shared_ptr<puzzle>, vector< shared_ptr<puzzle> >, compareFitness> Population;
     priority_queue<shared_ptr<puzzle>, vector< shared_ptr<puzzle> >, compareFitness> PopulationNew;
+    vector<shared_ptr<puzzle> > holder;
      uint64_t shuffle_table[4];
 
      
@@ -70,6 +73,7 @@ private:
     int random2();
     int random3();
     int random4();
+    int random150();
     void start();
     void breed();
     void brute(shared_ptr<puzzle>);
@@ -77,6 +81,8 @@ private:
     void makeKid1();
     void makeKid2(shared_ptr<puzzle> , shared_ptr<puzzle>);
     vector<shared_ptr<puzzle>> parents;
+
+    
 
 public:
     geneticAlgorithm();
