@@ -2,6 +2,11 @@
 		COS314 - Artificial Intelligence		     
 =====================================================================
 
+_____________
+	     |
+-u18014080   |
+-Shaun Naude |
+_____________|
 
 
 1)How to test Program: 
@@ -16,6 +21,8 @@
 
 	1.4) NOTE* when testing rbg443.txt the program will take ~8min to complete. All of the smaller testfiles 
 	     should finish in under ~1min.
+
+	1.5) The way the provided makefile works is it will place the executable in the bin folder once compiled.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

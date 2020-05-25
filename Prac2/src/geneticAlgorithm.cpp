@@ -8,7 +8,7 @@ geneticAlgorithm::~geneticAlgorithm() {
 
 }
 
-geneticAlgorithm::geneticAlgorithm(string fileName)
+geneticAlgorithm::geneticAlgorithm(string fileName,string par)
 {
 
     ifstream inputFile;
@@ -16,7 +16,7 @@ geneticAlgorithm::geneticAlgorithm(string fileName)
     string line;
     this->Input = make_shared<puzzle>();
 
-
+    
     if( inputFile.is_open() )
     {   
         //while not eof
@@ -25,6 +25,31 @@ geneticAlgorithm::geneticAlgorithm(string fileName)
             addData(line);
         }
     }
+    else{
+        cout<<"input file not opened "<<endl;
+        return;
+    }
+
+    //read from parameter file here 
+    inputFile.close();
+    inputFile.open(par);
+    //==============================
+        if( inputFile.is_open() )
+    {   
+        getline(inputFile,line);
+        //add to var one 
+        this->population = stoi(line);
+
+        getline(inputFile,line);
+        //add to var 2
+        this->generations = stoi(line);
+    }
+    else{
+        cout<<"GA file not opened"<<endl;
+        return;
+    }   
+
+    //===============================
 
     createPopulation();
 
@@ -69,7 +94,7 @@ void geneticAlgorithm::createPopulation(){
 
 
 
-   for(int i = 0 ; i<150 ; i++)
+   for(int i = 0 ; i<population ; i++)
    {
      temp = make_shared<puzzle>();
 
@@ -329,11 +354,37 @@ void geneticAlgorithm::start(){
                 // printf("Integer value is %d\n" , Population.top()->fitness);
                  gens++;
                  breed();
+                 if(gens > generations)
+                 {
+                     cout<<"Maximum number of generations reached!"<<endl;
+                     cout<<"========================================"<<endl;
+                     cout<<""<<endl;
+                     cout<<"Partially solved sudoku"<<endl;
+                    for(int k = 0 ; k<9 ; k++){
 
-            
-            //if(Population.top()->fitness >= 235)
-                //brute(Population.top());
-           
+                        for(int j = 0 ; j<9 ; j++){
+
+                            cout<<Population.top()->numbers[k][j]<<" ";
+
+                            }
+                        cout<<endl;
+
+                 }
+
+                 cout<<"Original input"<<endl;
+                    for(int k = 0 ; k<9 ; k++){
+
+                        for(int j = 0 ; j<9 ; j++){
+
+                            cout<<Input->numbers[k][j]<<" ";
+
+                            }
+                        cout<<endl;
+
+                    }
+                    
+
+                    return;
             
 
         }
@@ -344,10 +395,12 @@ void geneticAlgorithm::start(){
 
 
 }
+}
 
  void geneticAlgorithm::breed(){
 
-    for(int i = 0 ; i<75 ; i++)
+     int half = population/2;
+    for(int i = 0 ; i<half ; i++)
     {
         makeKid1();
     }
@@ -360,7 +413,7 @@ void geneticAlgorithm::start(){
     
     parents.clear();
     
-    for(int i = 0 ; i<150 ; i++)
+    for(int i = 0 ; i<population ; i++)
     {
         Population.push(PopulationNew.top());
         PopulationNew.pop();
@@ -759,6 +812,7 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
      if(k1->fitness == 162)
      {
          cout<<"Number of trials: "<<gens<<endl;
+         cout<<"Solved puzzle"<<endl;
          stop = true;
          for(int k = 0 ; k<9 ; k++)
         {
@@ -768,6 +822,17 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
             }
             cout<<endl;
         }
+
+        cout<<"Original input"<<endl;
+                    for(int k = 0 ; k<9 ; k++){
+
+                        for(int j = 0 ; j<9 ; j++){
+
+                            cout<<Input->numbers[k][j]<<" ";
+
+                            }
+                        cout<<endl;
+     }
      }
 
     mutate(k1);
@@ -775,7 +840,8 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
     k1->fitness = calcFitness(k1);
     if(k1->fitness == 162)
      {
-         cout<<"Number of trials: "<<gens<<endl;
+        cout<<"Number of trials: "<<gens<<endl;
+         cout<<"Solved puzzle"<<endl;
          stop = true;
          for(int k = 0 ; k<9 ; k++)
         {
@@ -785,6 +851,17 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
             }
             cout<<endl;
         }
+
+        cout<<"Original input"<<endl;
+                    for(int k = 0 ; k<9 ; k++){
+
+                        for(int j = 0 ; j<9 ; j++){
+
+                            cout<<Input->numbers[k][j]<<" ";
+
+                            }
+                        cout<<endl;
+     }
      }
     PopulationNew.push(k1);
 
@@ -974,6 +1051,7 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
      if(k1->fitness == 162)
      {
          cout<<"Number of trials: "<<gens<<endl;
+         cout<<"Solved puzzle"<<endl;
          stop = true;
          for(int k = 0 ; k<9 ; k++)
         {
@@ -983,6 +1061,17 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
             }
             cout<<endl;
         }
+
+        cout<<"Original input"<<endl;
+                    for(int k = 0 ; k<9 ; k++){
+
+                        for(int j = 0 ; j<9 ; j++){
+
+                            cout<<Input->numbers[k][j]<<" ";
+
+                            }
+                        cout<<endl;
+     }
 
      }
 
@@ -992,6 +1081,7 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
     if(k1->fitness == 162)
      {
          cout<<"Number of trials: "<<gens<<endl;
+         cout<<"Solved puzzle"<<endl;
          stop = true;
          for(int k = 0 ; k<9 ; k++)
         {
@@ -1001,6 +1091,17 @@ void geneticAlgorithm::mutate(shared_ptr<puzzle> Curr){
             }
             cout<<endl;
         }
+
+        cout<<"Original input"<<endl;
+                    for(int k = 0 ; k<9 ; k++){
+
+                        for(int j = 0 ; j<9 ; j++){
+
+                            cout<<Input->numbers[k][j]<<" ";
+
+                            }
+                        cout<<endl;
+     }
      }
     PopulationNew.push(k1);
 

@@ -35,6 +35,10 @@ private:
     //variables and structures
 //===================================================================
 
+    //GA
+    int population=0;
+    int generations=0;
+
     //input puzzle
     shared_ptr<puzzle> Input ;
     bool stop = false;
@@ -86,7 +90,7 @@ private:
 
 public:
     geneticAlgorithm();
-    geneticAlgorithm(string);
+    geneticAlgorithm(string,string);
     ~geneticAlgorithm();
     
 };
